@@ -1,9 +1,9 @@
 <?php
 
 class PrendaDAO{
-    public function getCountPrenda($id) {
+    public function getCountPrenda($id, $mov) {
         $con = new Conexion();
-        $sqlQury = "SELECT SUM(cantidad) as sumatoria FROM `prenda_salas` WHERE `id_prenda` = ".$id."";
+        $sqlQury = "SELECT SUM(cantidad) as sumatoria FROM `prenda_salas` WHERE `id_prenda` = ".$id." and id_movimiento like '".$mov."'";
         
         $resultado = $con->getConnection()->query($sqlQury);
         if($resultado->num_rows == 1){

@@ -6,6 +6,9 @@
          $usuDTOLogin = $_SESSION['usuario'];
          foreach ($usuDTOLogin->getM_rol() as $rol){
                 if($rol->getM_id() == 2){
+                    if(!isset($_SESSION['id_mov'])){
+                        $_SESSION['id_mov'] = hash("md5", rand(-9999999999999999, 9999999999999999));
+                    }
 ?>
 Sistema de carga de ropa sucia:
 <form action="CargarRopaSucia.php" method="get">
@@ -27,8 +30,8 @@ Sistema de carga de ropa sucia:
 ?>
 </select>
 <input type="submit" value="Agregar">
-<br><a href="index.php">Atrás</a>
 </form>
+<a href="index.php">Atrás</a> 
 <?php
                 if(isset($_GET['prenda'])){
                     $prenda = preg_split('/[\d]{1,}p/', $_GET['prenda']);
@@ -43,9 +46,9 @@ Sistema de carga de ropa sucia:
                     $prenda = PrendaDAO::getPrendaFromString($_GET['tipoprenda']);
                     $prenda->setM_cantidad($_GET['cantidad']);
                     
-                    $sala = SalasDAO::getSala($_GET['sala']);
+                    $sala = SalasDAO::getSala($_GET['sala'], $_SESSION['id_mov']);
                     
-                    SalasDAO::addSala($sala, $prenda);
+                    SalasDAO::addSala($sala, $prenda, $_SESSION['id_mov']);
                 }
                     
                 foreach($salaI as $aux){
@@ -53,7 +56,7 @@ Sistema de carga de ropa sucia:
 <form action="CargarRopaSucia.php" method="get">
 <?php
                     echo "<table border='1px'><tr><th colspan='3'>".$aux->getM_descripcion()."</th></tr>";
-                    $aux = SalasDAO::getSala($aux->getM_id());
+                    $aux = SalasDAO::getSala($aux->getM_id(), $_SESSION['id_mov']);
                     if($aux->getM_prendas() != null){
                         foreach ($aux->getM_prendas() as $prenda){
                             echo "<tr><td><img src='".$prenda->getM_icono()."' style='width: 25px'>".$prenda->getM_descripcion()."</td><td>".$prenda->getM_cantidad()."</td><td><button name='prenda' type='submit' value='".$aux->getM_id()."p".$prenda->getM_codigo()."'>Borrar</button></tr>";
@@ -72,7 +75,7 @@ Sistema de carga de ropa sucia:
                 $allprendasstr = PrendaDAO::getHTMLAllPrendas();
                 foreach($allprendasstr as $prendastr){
                     $objprenda = PrendaDAO::getPrendaFromString($prendastr[0]);
-                    $objprenda->setM_cantidad(PrendaDAO::getCountPrenda($objprenda->getM_codigo()));
+                    $objprenda->setM_cantidad(PrendaDAO::getCountPrenda($objprenda->getM_codigo(), $_SESSION['id_mov']));
                     echo "<tr><td><img src='".$objprenda->getM_icono()."' style='width: 25px'>".$objprenda->getM_descripcion()."</td><td>".$objprenda->getM_cantidad()."</td></tr>";
                     
                     $total += $objprenda->getM_cantidad();

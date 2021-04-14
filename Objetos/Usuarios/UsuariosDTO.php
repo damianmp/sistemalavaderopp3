@@ -21,7 +21,7 @@
             $this->m_ficha_municial = $ficha_municial;
             $this->m_rol = $rol;
         }
-        
+
         public function __construct($ficha_municial, $contrasenia) {
             $this->m_ficha_municial = $ficha_municial;
             $this->m_contrasenia = $contrasenia;
