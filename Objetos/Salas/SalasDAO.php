@@ -21,9 +21,9 @@ class SalasDAO{
         return $array;
     }
     
-    public function removeSalaPrenda($sala, $prenda) {
+    public function removeSalaPrenda($sala, $prenda, $id) {
         $con  = new Conexion();
-        $sqlQuery = "DELETE FROM prenda_salas WHERE id_salas =".$sala." and id_prenda = ".$prenda."";
+        $sqlQuery = "DELETE FROM prenda_salas WHERE id_salas =".$sala." and id_prenda = ".$prenda." and id_movimiento like '".$id."'";
         $con->getConnection()->query($sqlQuery);
     }
     

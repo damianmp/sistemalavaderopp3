@@ -40,7 +40,7 @@ Sistema de carga de ropa sucia:
                     $sala = $sala[0];
                     $prenda = $prenda[1];
                     
-                    SalasDAO::removeSalaPrenda($sala, $prenda);
+                    SalasDAO::removeSalaPrenda($sala, $prenda, $_SESSION['id_mov']);
                 }
                 if(isset($_GET['tipoprenda']) && isset($_GET['cantidad']) && isset($_GET['sala'])){
                     $prenda = PrendaDAO::getPrendaFromString($_GET['tipoprenda']);
