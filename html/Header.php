@@ -7,7 +7,8 @@
     include("Objetos/Prendas/PrendaDAO.php");
     include("Objetos/Salas/SalasDAO.php");
     include("Objetos/Salas/SalasDTO.php");
-    
+    include("Objetos/Movimiento/MovimientoDAO.php");
+    include("Objetos/Movimiento/MovimientoDTO.php");
     foreach (glob("Objetos/Prendas/DTO/*.php") as $filename)
     {
         include $filename;

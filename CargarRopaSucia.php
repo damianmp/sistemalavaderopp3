@@ -7,7 +7,7 @@
          foreach ($usuDTOLogin->getM_rol() as $rol){
                 if($rol->getM_id() == 2){
                     if(!isset($_SESSION['id_mov'])){
-                        $_SESSION['id_mov'] = hash("md5", rand(-9999999999999999, 9999999999999999));
+                        $_SESSION['id_mov'] = hash("md5", (rand(-9999999999999999, 9999999999999999)));
                     }
 ?>
 Sistema de carga de ropa sucia:
@@ -31,7 +31,7 @@ Sistema de carga de ropa sucia:
 </select>
 <input type="submit" value="Agregar">
 </form>
-<a href="index.php">Atrás</a> 
+<a href="index.php">Atrás</a>
 <?php
                 if(isset($_GET['prenda'])){
                     $prenda = preg_split('/[\d]{1,}p/', $_GET['prenda']);
@@ -80,9 +80,13 @@ Sistema de carga de ropa sucia:
                     
                     $total += $objprenda->getM_cantidad();
                 }
+                $_SESSION['total'] = $total;
                 echo "<tr><td style='background-color: red'>Total de prendas</td><td style='background-color: red'>".$total."</td></tr>";
 ?>
 </table>
+<form action="ProcesarRopaSucia.php" method="POST">
+<input type="submit" value="Procesar">
+</form>
 <?php
             }
         }
