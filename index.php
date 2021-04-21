@@ -30,19 +30,18 @@
             foreach ($usuDTOLogin->getM_rol() as $rol){
                 if($rol->getM_id() == 2){
 ?>
-<td><a href="CargarRopaSucia.php">Cargar ropa sucia</a></td><td><a href="cerrar.php">Cerrar sesion</a></td>
+<td><a href="CargarRopaSucia.php">Cargar ropa sucia</a></td>
 <?php
                     echo "<br>Todos los paquetes hechos:";
-                    $array = MovimientoDAO::getMovimientos(0);
-                    
+                    $array = MovimientoDAO::getMovimientos("*");
                     foreach ($array as $movimientos){
-                        echo "<br><a href='todo.php'>".$movimientos."</a>";
+                        echo "<br><a href='EditarPaquete.php?id=".$movimientos->getId()."'>".$movimientos."</a>";
                     }
                 }
             }
         }
 ?>
-</tr>
+</tr><td><a href="cerrar.php">Cerrar sesion</a></td>
 </table>
 <?php
     }

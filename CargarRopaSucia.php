@@ -25,7 +25,7 @@ Sistema de carga de ropa sucia:
 <?php
                     $salaI = SalasDAO::getAllSalas();
                     foreach ($salaI as $aux){
-                        echo "<option value='".$aux->getM_id()."'>".$aux->getM_Descripcion()."</option>";
+                        echo "<option value='".$aux->getM_id()."' ".(isset($_GET['sala']) && $_GET['sala'] == $aux->getM_id()?"selected":"").">".$aux->getM_Descripcion()."</option>";
                     }
 ?>
 </select>
