@@ -10,18 +10,9 @@
                         $_SESSION['id_mov'] = hash("md5", (rand(-9999999999999999, 9999999999999999)));
                     }
 ?>
-Sistema de carga de ropa sucia:
-<form action="CargarRopaSucia.php" method="get">
-    Tipo de prenda <select name="tipoprenda">
-<?php
-                    $tipoprendas = PrendaDAO::getHTMLAllPrendas();
-                    foreach ($tipoprendas as $prenda){
-                        echo "<option value='$prenda[0]'>".$prenda[0]."</option>";
-                    }
-?>
-</select>
-<br>Cantidad <input type="number" min="0" name="cantidad">
-<br>Salas <select name="sala">
+<h3>Sistema de carga de ropa sucia:</h3>
+<form  action="CargarRopaSucia.php" method="get">
+Salas <select id="sala" name="sala">
 <?php
                     $salaI = SalasDAO::getAllSalas();
                     foreach ($salaI as $aux){
@@ -29,7 +20,17 @@ Sistema de carga de ropa sucia:
                     }
 ?>
 </select>
-<input type="submit" value="Agregar">
+<br>Tipo de prenda <select id="tipoprenda" name="tipoprenda">
+
+<?php
+                    $tipoprendas = PrendaDAO::getHTMLAllPrendas();
+                    foreach ($tipoprendas as $prenda){
+                        echo "<option value='$prenda[0]'>".$prenda[0]."</option>";
+                    }
+?>
+</select>
+<br>Cantidad <input id="cantidad" type="number" min="0" name="cantidad">
+<input id="agregar" type="submit" value="Agregar">
 </form>
 <a href="index.php">Atrás</a>
 <?php
@@ -53,13 +54,13 @@ Sistema de carga de ropa sucia:
                     
                 foreach($salaI as $aux){
 ?>
-<form action="CargarRopaSucia.php" method="get">
+<form id="cargarRopaSucia" action="CargarRopaSucia.php" method="get">
 <?php
                     echo "<table border='1px'><tr><th colspan='3'>".$aux->getM_descripcion()."</th></tr>";
                     $aux = SalasDAO::getSala($aux->getM_id(), $_SESSION['id_mov']);
                     if($aux->getM_prendas() != null){
                         foreach ($aux->getM_prendas() as $prenda){
-                            echo "<tr><td><img src='".$prenda->getM_icono()."' style='width: 25px'>".$prenda->getM_descripcion()."</td><td>".$prenda->getM_cantidad()."</td><td><button name='prenda' type='submit' value='".$aux->getM_id()."p".$prenda->getM_codigo()."'>Borrar</button></tr>";
+                            echo "<tr><td><img src='".$prenda->getM_icono()."' style='width: 25px'>".$prenda->getM_descripcion()."</td><td>".$prenda->getM_cantidad()."</td><td><button id='borrar' name='prenda' type='submit' value='".$aux->getM_id()."p".$prenda->getM_codigo()."'>Borrar</button></tr>";
                         }
                     }
                     echo "</table>";
@@ -68,7 +69,8 @@ Sistema de carga de ropa sucia:
 <?php
                 }
 ?>
-<table border='1px'>
+<div id="tablaTotal">
+<table  border='1px'>
 <tr><th colspan="2">Total</th></tr>
 <?php
                 $total = 0;
@@ -81,12 +83,13 @@ Sistema de carga de ropa sucia:
                     $total += $objprenda->getM_cantidad();
                 }
                 $_SESSION['total'] = $total;
-                echo "<tr><td style='background-color: red'>Total de prendas</td><td style='background-color: red'>".$total."</td></tr>";
+               // echo "<tr><td style='background-color: red'>Total de prendas</td><td style='background-color: red'>".$total."</td></tr>";
 ?>
 </table>
 <form action="ProcesarRopaSucia.php" method="POST">
-<input type="submit" value="Procesar">
+<input id="procesar" type="submit" value="Procesar">
 </form>
+</div>
 <?php
             }
         }

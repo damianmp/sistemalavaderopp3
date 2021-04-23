@@ -18,5 +18,8 @@
 <html>
 <head>
 <link rel="stylesheet" href="css/Inicio.css" type="text/css">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/codigo.js"></script>
 </head>
 <body>
