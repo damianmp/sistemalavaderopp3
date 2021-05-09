@@ -34,8 +34,10 @@ class SalasDAO{
         $resultado = $con->getConnection()->query($sqlQuery);
         if($resultado->num_rows == 1){
             //update
+            $row = $resultado->fetch_assoc();
+            $cantidad = $prenda->getM_cantidad() + $row['cantidad'];
             
-            $sqlQuery = "UPDATE prenda_salas SET cantidad = ".$prenda->getM_cantidad()." WHERE id_salas = ".$sala->getM_id()." and id_prenda = ".$prenda->getM_codigo()." and id_movimiento like '".$id."'";
+            $sqlQuery = "UPDATE prenda_salas SET cantidad = ".$cantidad." WHERE id_salas = ".$sala->getM_id()." and id_prenda = ".$prenda->getM_codigo()." and id_movimiento like '".$id."'";
             $con->getConnection()->query($sqlQuery);
         }
         else{

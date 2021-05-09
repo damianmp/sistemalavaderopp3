@@ -1,6 +1,6 @@
 <?php
     include_once("html/Header.php");
-    
+
     session_start();
     if(!isset($_SESSION['usuario'])){
 ?>
@@ -31,6 +31,8 @@
                 if($rol->getM_id() == 2){
 ?>
 <td><a href="CargarRopaSucia.php">Cargar ropa sucia</a></td>
+<td><a href="AdministrarDeposito.php">Administrar deposito</a></td>
+<td><a href="CrearPrenda.php">Crear nuevo tipo prenda</a></td>
 <?php
                     echo "<br>Todos los paquetes hechos:";
                     $array = MovimientoDAO::getMovimientos("*");

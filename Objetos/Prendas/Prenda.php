@@ -38,6 +38,6 @@ class Prenda{
     }
 
     public function __toString() {
-        return $this->m_codigo." - ". $this->$m_cantidad." - <img src='".$this->m_icono."'>";
+        return $this->m_codigo." - ". $this->m_cantidad." - <img src='".$this->m_icono."'>";
     }
 }

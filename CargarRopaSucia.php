@@ -29,7 +29,7 @@ Salas <select id="sala" name="sala">
                     }
 ?>
 </select>
-<br>Cantidad <input id="cantidad" type="number" min="0" name="cantidad">
+<br>Cantidad <input id="cantidad" type="number" min="0" name="cantidad" value="0">
 <input id="agregar" type="submit" value="Agregar">
 </form>
 <a href="index.php">Atrás</a>
