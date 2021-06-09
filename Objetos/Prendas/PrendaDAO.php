@@ -59,10 +59,55 @@ class PrendaDAO{
         $sqlQury = "SELECT SUM(cantidad) as sumatoria FROM `prenda_salas` WHERE `id_prenda` = ".$id." and id_movimiento like '".$mov."'";
         
         $resultado = $con->getConnection()->query($sqlQury);
-        if($resultado->num_rows == 1){
+        if($resultado != null && $resultado->num_rows == 1){
             $row = $resultado->fetch_assoc();
-            
             return $row['sumatoria'];
+        }
+    }
+    
+    public function getCountPrendaSucia($prenda){
+        $con = new Conexion();
+        $sqlQuery = "SELECT sum(cantidad) as total from prenda_salas as ps join movimiento as m on m.id like ps.id_movimiento where id_prenda = ".$prenda->getM_codigo();
+        
+        $resultado = $con->getConnection()->query($sqlQuery);
+        if($resultado != null && $resultado->num_rows == 1){
+            $row = $resultado->fetch_assoc();
+            return $row['total'];
+        }
+    }
+    
+    public function isOutboundPrendaDeposito($prenda){
+        /*
+         * Diego dijo, que al agregarse una prenda esa prenda tiene que tener un respaldo incluso
+         * por ejemplo:
+         *  si agrego 2 prendas, entonces tengo que tener 2 prendas mas por lo menos para poder
+         *  tener un respaldo. si agrego 2 prendas sucias, entonces tengo que tener por lo menos
+         *  2 prendas mas, dando un total de 4 prendas.-
+         */
+        $cantidadSucia = PrendaDAO::getCountPrendaSucia($prenda);
+        if($cantidadSucia == null){
+            $cantidadSucia = 0;
+        }
+        
+        $mapa = PrendaDAO::getPrendaDeposito();
+        $aux = null;
+        foreach($mapa->keys() as $auxp){
+            if($auxp->getM_codigo() == $prenda->getM_codigo()){
+                $aux = $auxp;
+            }
+        }
+        if($aux != null){
+            $total = $prenda->getM_cantidad()*2 + $cantidadSucia;
+
+            //echo "<br>=============<br>cantidad a agregar: ". $prenda->getM_cantidad()."(".($prenda->getM_cantidad()*2).")<br>cantidad de prendas sucias(".$prenda->getM_descripcion()."): ".$cantidadSucia."<br>deposito(".$aux->getM_descripcion()."): ".$aux->getM_cantidad();
+
+            if($total > $aux->getM_cantidad()){
+                return true;
+            }
+            return false;
+        }
+        else{
+            return true;
         }
     }
     

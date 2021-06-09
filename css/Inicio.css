@@ -9,41 +9,69 @@
 }
 
 body {
-    background-color: rgb(250, 219, 161);
+    background: url(../imagenes/hospital2.jpg);
+    background-size: cover;
 }
 
-#sala {
-    background-color: rgb(220, 236, 246);
+.main-section {
+    margin: 0 auto;
+    margin-top: 25%;
+    padding: 0;
 }
 
-#tipoprenda {
-    background-color: rgb(220, 236, 246);
+.modal-content {
+    background-color: #3b4652;
+    opacity: .85;
+    padding: 0 20px;
+    box-shadow: 0px 0px 3px #848484;
 }
 
-#cantidad {
-    background-color: rgb(220, 236, 246);
+.user-img {
+    margin-top: -50px;
+    margin-bottom: 35px;
 }
 
-#cargarRopaSucia {
-    /* display: none;*/
+.user-img img {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0px 0px 3px #848484;
+    border-radius: 50%;
 }
 
-#tablaTotal {
-    /*  background-color: teal;
-    padding: 5px;
-    margin: 5px;*/
+.form-group input {
+    height: 42 px;
+    font-size: 18px;
+    border: 0;
+    padding-left: 54px;
+    border-radius: 5px;
 }
 
-#agregar {
-    background-color: rgb(197, 196, 191);
-    cursor: pointer;
+.form-group::before {
+    font-family: "Font Awesome\ 5 free";
+    position: absolute;
+    left: 28px;
+    font-size: 20px;
+    padding-top: 0px;
 }
 
-#procesar {
-    background-color: rgb(197, 196, 191);
-    cursor: pointer;
+.form-group#user-group::before {
+    content: "\f007";
 }
 
-#borrar {
-    background-color: rgb(197, 196, 191);
+.form-group#contrasena-group::before {
+    content: "\f023";
 }
+
+button {
+    width: 60%;
+    margin: 5px 0 25px;
+}
+
+.forgot {
+    padding: 5px 0;
+}
+
+.forgot a {
+    color: white;
+}
+

@@ -27,7 +27,6 @@
                     $prenda->setM_cantidad($_GET['cantidad']);
                     
                     PrendaDAO::addPrendaDeposito($prenda);
-                    echo "Exito! la prenda ha sido creada";
                 }
 ?>
 <table border='1px'>
