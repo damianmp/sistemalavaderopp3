@@ -75,8 +75,8 @@ class PrendaDAO{
             return $row['total'];
         }
     }
-    
-    public function isOutboundPrendaDeposito($prenda){
+
+    public function isOutboundPrendaDeposito($prenda, $movimiento){
         /*
          * Diego dijo, que al agregarse una prenda esa prenda tiene que tener un respaldo incluso
          * por ejemplo:
@@ -97,10 +97,8 @@ class PrendaDAO{
             }
         }
         if($aux != null){
-            $total = $prenda->getM_cantidad()*2 + $cantidadSucia;
-
-            //echo "<br>=============<br>cantidad a agregar: ". $prenda->getM_cantidad()."(".($prenda->getM_cantidad()*2).")<br>cantidad de prendas sucias(".$prenda->getM_descripcion()."): ".$cantidadSucia."<br>deposito(".$aux->getM_descripcion()."): ".$aux->getM_cantidad();
-
+            $total = (PrendaDAO::getCountPrenda($prenda->getM_codigo(), $movimiento)+$prenda->getM_cantidad())*2 + $cantidadSucia;
+            //echo "<br>=============<br>cantidad todavia sin ingresar: ".$total."<br>cantidad a agregar: ". $prenda->getM_cantidad()."(".($prenda->getM_cantidad()*2).")<br>cantidad de prendas sucias(".$prenda->getM_descripcion()."): ".$cantidadSucia."<br>deposito(".$aux->getM_descripcion()."): ".$aux->getM_cantidad();
             if($total > $aux->getM_cantidad()){
                 return true;
             }
@@ -118,8 +116,12 @@ class PrendaDAO{
         foreach (glob("Objetos/Prendas/DTO/*.php") as $prendas){
             $aux = preg_split('/(Objetos\/Prendas\/DTO\/)/', $prendas);
             $aux = preg_split('/(.php)/', $aux[1]);
-            $array->append($aux);
             
+            //echo $aux[0]."->ESTADO:".PrendaDAO::getPrenda($aux[0])->getM_estado()."<br>";
+            
+            if(PrendaDAO::getPrenda($aux[0])->getM_estado() == 1){
+                $array->append($aux);
+            }
         }
         return $array;
     }
@@ -142,7 +144,7 @@ class PrendaDAO{
     
     public function getPrenda($prenda) {
         $con = new Conexion();
-        $sqlQuery = "SELECT p.codigo, p.descripcion as prenda FROM prenda as p WHERE p.descripcion like '".$prenda."'";
+        $sqlQuery = "SELECT p.codigo, p.descripcion as prenda, p.estado FROM prenda as p WHERE p.descripcion like '".$prenda."'";
         $resultado = $con->getConnection()->query($sqlQuery);
         
         if(class_exists($prenda)){
@@ -156,6 +158,7 @@ class PrendaDAO{
             while($row = $resultado->fetch_assoc()){
                 $aux->setM_codigo($row['codigo']);
                 $aux->setM_descripcion($row['prenda']);
+                $aux->setM_estado($row['estado']);
             }
         }
         return $aux;
@@ -183,5 +186,12 @@ class PrendaDAO{
         $auxP = PrendaDAO::getPrenda($strPrenda);
         
         return $auxP;
+    }
+    
+    public function bajaPrenda($prenda) {
+        $con = new Conexion();
+        $sqlQuery = "UPDATE prenda SET estado = 0 WHERE descripcion like '".$prenda."'";
+        $con->getConnection()->query($sqlQuery);
+        return 1;
     }
 }

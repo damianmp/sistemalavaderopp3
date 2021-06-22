@@ -4,7 +4,16 @@ class Prenda{
     private $m_icono;
     private $m_descripcion;
     private $m_cantidad;
+    private $m_estado;
     
+    public function getM_estado() {
+        return $this->m_estado;
+    }
+
+    public function setM_estado($m_estado): void {
+        $this->m_estado = $m_estado;
+    }
+
     public function getM_cantidad() {
         return $this->m_cantidad;
     }

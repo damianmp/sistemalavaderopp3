@@ -6,6 +6,7 @@
          $usuDTOLogin = $_SESSION['usuario'];
          foreach ($usuDTOLogin->getM_rol() as $rol){
                 if($rol->getM_id() == 2){
+                    include_once ("Barra.php");
                     if(!isset($_SESSION['id_mov'])){
                         $_SESSION['id_mov'] = hash("md5", (rand(-9999999999999999, 9999999999999999)));
                     }
@@ -44,7 +45,7 @@
         <div class="form-group">
             <label for="Cantidad" class="control-label col-md-2">Cantidad</label>
             <div class="col-md-2">
-                 <input id="cantidad" class="form-control" type="number" min="0"  name="cantidad">
+                 <input id="cantidad" class="form-control" type="number" min="0" value="0" name="cantidad">
             </div>
         </div>
 
@@ -74,7 +75,7 @@
                     $sala = SalasDAO::getSala($_GET['sala'], $_SESSION['id_mov']);
                     
                     //verifico que lo que lo que se quiera agregar no sobrepase lo que hay en el deposito
-                    if(PrendaDAO::isOutboundPrendaDeposito($prenda)){
+                    if(PrendaDAO::isOutboundPrendaDeposito($prenda, $_SESSION['id_mov'])){
                         echo "<a style='color: red;'>Error! cantidad de prendas a agregar invalida</a>";  
                     }
                     else{
@@ -90,7 +91,7 @@
                 $aux = SalasDAO::getSala($aux->getM_id(), $_SESSION['id_mov']);
                 if($aux->getM_prendas() != null){
                     foreach ($aux->getM_prendas() as $prenda){
-                     echo "<tr><td><img src='".$prenda->getM_icono()."' style='width: 80px'></td><td ><h3>".$prenda->getM_descripcion()."</h3></td><td><h3>".$prenda->getM_cantidad()."</h3></td><td><button id='borrar' class='btn btn-warning btn-sm btn-block' name='prenda' type='submit' value='".$aux->getM_id()."p".$prenda->getM_codigo()."'>Borrar</button></tr>";
+                        echo "<tr><td><img src='".$prenda->getM_icono()."' style='width: 80px'></td><td ><h3>".$prenda->getM_descripcion()."</h3></td><td><h3>".$prenda->getM_cantidad()."</h3></td><td><button id='borrar' class='btn btn-warning btn-sm btn-block' name='prenda' type='submit' value='".$aux->getM_id()."p".$prenda->getM_codigo()."'>Borrar</button></tr>";
                     }
                 }
                 echo "</table>";

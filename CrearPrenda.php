@@ -6,6 +6,7 @@
         $usuDTOLogin = $_SESSION['usuario'];
         foreach ($usuDTOLogin->getM_rol() as $rol){
             if($rol->getM_id() == 2){
+                include_once("Barra.php");
 ?>
 <h3>Crear nuevo tipo de prenda:</h3>
 <form action="CrearPrenda.php" method="POST" enctype="multipart/form-data">
@@ -15,7 +16,23 @@
     <input type="submit" name="submit" value="Agregar">
 </form>
 <a href="index.php">Atrás</a>
+<h3>Eliminar prendas:</h3>
+<form  id='eliminarPrendas'action="CrearPrenda.php" method="GET">
+<table>
 <?php
+                $tipoprendas = PrendaDAO::getHTMLAllPrendas();
+                foreach ($tipoprendas as $prenda){
+                    $preda_aux = PrendaDAO::getPrenda($prenda[0]);
+                    echo "<tr><td><img src='".$preda_aux->getM_icono()."' style='width: 25px'>".$preda_aux->getM_descripcion()."</td><td><button id='borrar' class='btn btn-warning btn-sm btn-block' name='prenda' type='submit' value='".$preda_aux->getM_descripcion()."'>Eliminar</button></td></tr>";
+                }
+?>
+</table>
+</form>
+<?php
+                if(isset($_GET['prenda'])){
+                    PrendaDAO::bajaPrenda($_GET['prenda']);
+                    echo "<meta http-equiv=\"refresh\" content=\"0;url=https://www.sistemalavaderopp3.ml/CrearPrenda.php\"/>";
+                }
                 if(isset($_POST['submit']) && isset($_POST['codigo']))
                 {
                     if(isset($_POST['nombre']) && strlen($_POST['nombre']) > 2){

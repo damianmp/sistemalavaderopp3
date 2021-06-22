@@ -8,5 +8,13 @@ $(document).ready(function(){
 				}
 			});
 		}
+                else if($(this).attr('id') == "eliminarPrendas"){
+                    	$( this ).bind( "submit", function (event) {
+				var r = window.confirm("estas seguro que deseas borrar la ropa hospitalaria");
+				if(r == false){
+					event.preventDefault();
+				}
+			});
+                }
 	});
 });

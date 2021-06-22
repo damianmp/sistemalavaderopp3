@@ -6,21 +6,44 @@
         $usuDTOLogin = $_SESSION['usuario'];
         foreach ($usuDTOLogin->getM_rol() as $rol){
             if($rol->getM_id() == 2){
+                include_once ("Barra.php");
 ?>
-<h3>Sistema de Administracion del deposito:</h3>
-<form action="AdministrarDeposito.php" method="GET">
-<br>Tipo de prenda <select id="tipoprenda" name="tipoprenda">
-<?php
-                $tipoprendas = PrendaDAO::getHTMLAllPrendas();
-                foreach ($tipoprendas as $prenda){
-                    echo "<option value='$prenda[0]'>".$prenda[0]."</option>";
-                }
-?>
+<div class="container">
+ <div class="form-group">
+  <label for="Salas" class="control-label col-md-7"><h3>Sistema de Administracion del deposito:</h3></label>
+ </div>
+</div>
+<form class="form-horizontal" action="AdministrarDeposito.php" method="GET">
+<div class="form-group ">
+<label for="Salas" class="control-label col-md-2">Tipo de prenda</label>
+<div class="col-md-5">
+<select id="tipoprenda" class="form-control" name="tipoprenda">
+
+		<?php
+			$tipoprendas = PrendaDAO::getHTMLAllPrendas();
+			foreach ($tipoprendas as $prenda){
+				echo "<option value='$prenda[0]'>".$prenda[0]."</option>";
+			}
+		?>
 </select>
-<br>Cantidad <input id="cantidad" type="number" min="0" name="cantidad" value="0">
-<input id="agregar" type="submit" value="Agregar">
+</div>
+</div>
+<div class="form-group ">
+<label for="Salas" class="control-label col-md-2">Cantidad</label>
+<div class="col-md-2">
+<input id="cantidad" class="form-control" type="number" min="0" name="cantidad" value="0">
+</div>
+</div>
+<div class="col-md-2 col.md.offset-2">
+<input id="agregar" class="btn btn-primary btn-lg" type="submit" value="Agregar">
+</div>
+
 </form>
+<div class="form-group">
+<div class="col-md-2 col.md.offset-2">
 <a href="index.php">Atrás</a>
+</div>
+</div>
 <?php
                 if(isset($_GET['tipoprenda']) && isset($_GET['cantidad'])){
                     $prenda = PrendaDAO::getPrenda($_GET['tipoprenda']);
