@@ -1,6 +1,15 @@
 <?php
 
 class MovimientoDAO{
+    public function deleteMovimiento($id) {
+        $con = new Conexion();
+        $sqlQuery = "DELETE FROM `movimiento` WHERE id like '".$id."'";
+        $statement = $con->getConnection()->query($sqlQuery);
+        
+        $sqlQuery = "DELETE FROM `prenda_salas` WHERE `id_movimiento` like '".$id."'";
+        $statement = $con->getConnection()->query($sqlQuery);
+    }
+    
     public function addMovimento($usuario, $sub_total, $mov) {
         $con = new Conexion();
         $sqlQuery = "INSERT INTO movimiento(id_usuarios, id, total, fecha) VALUES (?,?,?, CURRENT_TIMESTAMP)";

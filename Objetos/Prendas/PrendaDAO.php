@@ -1,6 +1,19 @@
 <?php
 
 class PrendaDAO{
+    public function isPrendaInDepositoFromMovimiento($prenda, $id){
+        $con = new Conexion();
+        $sqlQuery = "SELECT count(*) as 'cantidad_de_registro' FROM `prenda_salas` WHERE `id_prenda` = ".$prenda->getM_codigo()." and `id_movimiento` = '".$id."' limit 1 ";
+        $resultado = $con->getConnection()->query($sqlQuery);
+        $row = $resultado->fetch_assoc();
+        if($row['cantidad_de_registro'] > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
     public function addPrendaDeposito($prenda){
         $con = new Conexion();
         

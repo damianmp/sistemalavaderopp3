@@ -34,7 +34,7 @@
                 if($rol->getM_id() == 2){
                     include_once ("Barra.php");
                     ?>
-                    <div class="container-fluid">
+                    <div class="container-fluid modal-content">
                     <div class="modal-dialog text-center">
                     <div class="row">
                     <div class="col-md-3">

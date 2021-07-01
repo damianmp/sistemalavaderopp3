@@ -6,6 +6,7 @@
         $usuDTOLogin = $_SESSION['usuario'];
         foreach ($usuDTOLogin->getM_rol() as $rol){
             if($rol->getM_id() == 2){
+                include_once("Barra.php");
                 $aux = MovimientoDAO::getMovimientos($_GET['id']);
                 $movimiento = $aux[0];
                 
@@ -23,6 +24,27 @@
 </table>
 <?php
                 }
+                ?>
+
+<form action="ConfirmarPaquete.php" method="POST">
+    <?php
+                $array_prendas = PrendaDAO::getHTMLAllPrendas();
+                echo "<table>";
+                foreach($array_prendas as $prendas){
+                    $aux = PrendaDAO::getPrendaFromString($prendas[0]);
+                    //var_dump($aux);
+                    if(PrendaDAO::isPrendaInDepositoFromMovimiento($aux, $movimiento->getId())){
+                        echo "<tr><td><img src='".$aux->getM_icono()."' style='width: 25px'>".$aux->getM_descripcion().""
+                                . "<input name='".$aux->getM_descripcion()."' required='required'/>"
+                                . "</td></tr>";
+                    }
+                }
+                echo "<input name='id' value='".$_GET['id']."' hidden></table>";
+    ?>
+    <input type="submit" value="Levantar paquete"/>
+</form>
+
+                <?php
             }
         }   
     }
