@@ -7,6 +7,9 @@ include_once("html/Header.php");
         foreach ($usuDTOLogin->getM_rol() as $rol){
             if($rol->getM_id() == 2){
                 include_once("Barra.php");
+                ?>
+<div class="container-fluid modal-content">
+<?php
                 //var_dump($_POST);
                 $prendas = PrendaDAO::getHTMLAllPrendas();
 
@@ -44,6 +47,7 @@ include_once("html/Header.php");
     echo $_POST['id'];
     ?>" hidden>
 </form>
+</div>
 <?php
             }
         }

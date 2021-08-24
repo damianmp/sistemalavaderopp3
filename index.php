@@ -19,7 +19,7 @@
                 </div> 
                 <button type="submit" class="btn btn-primary" value="Ingresar"><i class="fas fa-sign-in-alt"></i> Ingresar</button>
                 <div class="col-12 forgot">
-                <a href="https://www.sistemalavaderopp3.ml">¿Olvidaste la contraseña?</a>
+                <a href="contrasenia.php">¿Olvidaste la contraseña?</a>
                 </div> 
             </form>
         </div>
@@ -49,6 +49,9 @@
                         echo "<br><a href='EditarPaquete.php?id=".$movimientos->getId()."'>".$movimientos."</a>";
                     }
                     ?>
+                        <div style="margin-top: 100px;text-align: center;font-style: italic;font-size: 10px;">
+                            Trabajo practico hecho por: Diego Pardo, Damian Elias Molina Ponce, Gerardo Aponte y Ramiro Claros
+                        </div>
                     </div>
                     <?php
                 }

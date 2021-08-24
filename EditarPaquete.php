@@ -7,8 +7,13 @@
         foreach ($usuDTOLogin->getM_rol() as $rol){
             if($rol->getM_id() == 2){
                 include_once("Barra.php");
+                ?>
+<div class="container-fluid modal-content">
+<?php
                 $aux = MovimientoDAO::getMovimientos($_GET['id']);
                 $movimiento = $aux[0];
+                
+                echo "<b>ID del Movimiento: </b>".$_GET['id']."<br><b> Fecha del paquete hecho: </b>".$movimiento->getFecha();
                 
                 $salas_array = MovimientoDAO::getSalaPrendaFromMovimiento($movimiento->getId());
                 
@@ -25,7 +30,8 @@
 <?php
                 }
                 ?>
-
+<br>
+<b>Prendas en devueltas:</b>
 <form action="ConfirmarPaquete.php" method="POST">
     <?php
                 $array_prendas = PrendaDAO::getHTMLAllPrendas();
@@ -50,6 +56,7 @@
     }
 ?>
 <a href="index.php">Atrás</a>
+</div>
 <?php
     include_once("html/Footer.php");
 ?>

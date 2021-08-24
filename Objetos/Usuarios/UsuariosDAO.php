@@ -28,6 +28,28 @@
             else{
                 return null;
             }
-        } 
+        }
+        
+        public function isEmailValid($email){
+            $con = new Conexion();
+            $sqlQuery = "SELECT * FROM `usuarios` where correo = '".$email."'";
+            $resultado = $con->getConnection()->query($sqlQuery);
+            if($resultado->num_rows == 1){
+                $row = $resultado->fetch_assoc();
+                $usu = new UsuarioDTO(0,0);
+                $usu->__constructInitComplete($row['id_usuarios'], $row['contrasenia'], $row['nombre'], $row['apellido'], $row['correo'], $row['fecha_alta'], $row['fecha_baja'], $row['ficha_municipal'], 0);
+                
+                return $usu;
+            }
+            else{
+                return null;
+            }
+        }
+        
+        public function changePassword($email, $contrasenia, $sha1){
+            $con = new Conexion();
+            $sqlQuery = "UPDATE `usuarios` SET `contrasenia` = '". ($sha1? sha1($contrasenia):$contrasenia )."' WHERE `usuarios`.`correo` like '".$email."'";
+            $con->getConnection()->query($sqlQuery);
+        }
     }
 ?>

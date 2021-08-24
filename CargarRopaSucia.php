@@ -11,6 +11,7 @@
                         $_SESSION['id_mov'] = hash("md5", (rand(-9999999999999999, 9999999999999999)));
                     }
 ?>
+<div class="container-fluid modal-content">
 <div class="form-group">
 	<label for="tituloCargaRopaSucia" class="control-label col-md-10"><h3>Sistema de carga de ropa sucia:</h3></label>
 </div>
@@ -117,6 +118,7 @@
         <form action="ProcesarRopaSucia.php" method="POST">
             <input id="procesar" class="btn btn-success btn-lg" type="submit" value="Procesar">
         </form>
+</div>
     <?php
             }
         }

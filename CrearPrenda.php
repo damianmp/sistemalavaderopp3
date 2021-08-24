@@ -8,6 +8,7 @@
             if($rol->getM_id() == 2){
                 include_once("Barra.php");
 ?>
+<div class="container-fluid modal-content">
 <h3>Crear nuevo tipo de prenda:</h3>
 <form action="CrearPrenda.php" method="POST" enctype="multipart/form-data">
     Nombre de la prenda: <input name="nombre"></input><br>
@@ -37,6 +38,9 @@
                 {
                     if(isset($_POST['nombre']) && strlen($_POST['nombre']) > 2){
                         //var_dump($_FILES['imagen']);
+                        
+                        $_POST['nombre'] = PrendaDAO::fixNombrePrenda($_POST['nombre']);
+                        
                         if(PrendaDAO::getPrenda($_POST['nombre']) == null){
                             $carpeta = "imagenes/". basename($_FILES['imagen']['tmp_name']);
                             if(move_uploaded_file($_FILES['imagen']['tmp_name'], $carpeta)){
@@ -45,13 +49,13 @@
 
                                 $archivo = pathinfo($carpeta);
                                 $extension = $archivo['extension'];
-
+                               
                                 rename($carpeta, "imagenes/".$_POST['nombre'].".".$extension);
                                 if(!strcmp($extension, "jpg")){
                                     $archivo = fopen("Objetos/Prendas/DTO/".$_POST['nombre'].".php", "wr");
-
+                                    
                                     $txt = "<?php\nclass ".$_POST['nombre']." extends Prenda{\nstatic private \$icon_prenda = 'imagenes/".$_POST['nombre'].".".$extension."';\npublic function __construct() {\n\$this->setM_icono(self::\$icon_prenda);\n}\npublic function __toString() {\nreturn parent::__toString();\n}\n}";
-
+                                    
                                     fwrite($archivo, $txt);
                                     fclose($archivo);
 
@@ -70,7 +74,7 @@
                                 }
                                 else{
                                     echo "<a style='color: red;'>Error! imagen no compatible.</a>";
-                                    unlink("imagenes/".$_POST['nombre'].".".$extension);
+                                    unlink("imagenes/".PrendaDAO::fixNombrePrenda($_POST['nombre']).".".$extension);
                                 }
                             }
                         }
@@ -85,5 +89,8 @@
             }
         }
     }
+    ?>
+</div>
+<?php
     include_once("html/Footer.php");
 ?>

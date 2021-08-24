@@ -207,4 +207,12 @@ class PrendaDAO{
         $con->getConnection()->query($sqlQuery);
         return 1;
     }
+    
+    public function fixNombrePrenda($prenda){
+        if(preg_match('/[a-zA-Z\s]{1,}/', $prenda, $prenda)){
+            $prenda = preg_replace('/\s+/', '', $prenda);
+            return $prenda[0];
+        }
+        return $prenda;
+    }
 }
