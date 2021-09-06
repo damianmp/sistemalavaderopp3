@@ -44,6 +44,23 @@ class DepositoDAO{
             return $row['cantidad'];
         }
     }
+    
+    public function getPrendasSinEnviar(Prenda $prenda) {
+        /*
+         * Buscar entre los movimientos, las prendas NO procesadas
+         */
+        $con = new Conexion();
+        
+        $sqlQuery = "SELECT sum(ps.cantidad) as total FROM `usuarios_movimiento` as um join prenda_salas as ps on um.prenda_salas like ps.id_movimiento WHERE ps.id_prenda = ".$prenda->getM_codigo();
+        
+        $resultados = $con->getConnection()->query($sqlQuery);
+        if($resultados->num_rows > 0){
+            $row = $resultados->fetch_assoc();
+            return $row['total'];
+        }
+        
+        
+    }
 }
 ?>
 

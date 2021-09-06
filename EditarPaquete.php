@@ -34,7 +34,7 @@
 <b>Prendas en devueltas:</b>
 <form action="ConfirmarPaquete.php" method="POST">
     <?php
-                $array_prendas = PrendaDAO::getHTMLAllPrendas();
+                $array_prendas = PrendaDAO::getHTMLAllPrendas(1);
                 echo "<table>";
                 foreach($array_prendas as $prendas){
                     $aux = PrendaDAO::getPrendaFromString($prendas[0]);

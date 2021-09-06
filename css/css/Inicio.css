@@ -1,0 +1,78 @@
+#inicio {
+    margin: 0 auto;
+}
+
+#imagen_inicio {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    background-image: url(../imagenes/fondosgsrh10.jpg);
+    background-position: center center;
+}
+
+.main-section {
+    margin: 0 auto;
+    margin-top: 25%;
+    padding: 0;
+}
+
+.modal-content {
+    background-color: #c1dcf8;
+    opacity: .85;
+    padding: 0 20px;
+    box-shadow: 5px 5px 5px #a7bfeb;
+}
+
+.main-sections {
+    margin: 0 auto;
+    margin-top: 1%;
+    padding: 0;
+}
+
+.modal-contents {
+    background-color: #a5c8ee;
+    opacity: .85;
+    padding: 1 1px;
+    box-shadow: 1px 1px 1px #797c81;
+}
+
+.user-img {
+    margin-top: -50px;
+    margin-bottom: 35px;
+}
+
+.user-img img {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0px 0px 3px #848484;
+    border-radius: 50%;
+}
+
+.form-group input {
+    height: 42 px;
+    font-size: 18px;
+    border: 0;
+    padding-left: 54px;
+    border-radius: 5px;
+}
+
+.forgot {
+    padding: 5px 0;
+}
+
+.forgot a {
+    color: white;
+}
+
+.bg {
+    background-image: url(../imagenes/sistema\ \(2\).gif);
+    background-position: center center;
+}
+
+.logoContrasenia {
+    background-image: url(../imagenes/ingrese\ Email.gif);
+    background-position: center center;
+}

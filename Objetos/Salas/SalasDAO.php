@@ -92,4 +92,35 @@ class SalasDAO{
         }
         return $sala;
     }
+    
+    public function addUsuarioPrendaSalas(UsuarioDTO $usuario, $id_movimento) {
+        $con = new Conexion();
+        $sqlQuery = "INSERT INTO `usuarios_movimiento`(`usuario`, `prenda_salas`) VALUES (?,?)";
+        
+        $statement = $con->getConnection()->prepare($sqlQuery);
+        $statement->bind_param("is", $id_usuario, $id_predasalas);
+        $id_usuario = $usuario->getM_idusuario();
+        $id_predasalas = $id_movimento;
+        
+        if(!$statement->execute()){
+            echo "error (" . $statement->errno.") ".$statement->error;
+        }
+    }
+    
+    public function getUsuarioPrendaSalas(UsuarioDTO $usuario) {
+        $con = new Conexion();
+        $sqlQuery = "SELECT * FROM `usuarios_movimiento` WHERE `usuario` = ".$usuario->getM_idusuario();
+        $resultado = $con->getConnection()->query($sqlQuery);
+        if($resultado->num_rows == 1){
+            $row = $resultado->fetch_assoc();
+            return $row['prenda_salas'];
+        }
+        return null;
+    }
+    
+    public function removeUsuarioPrendaSalas(UsuarioDTO $usuario) {
+        $con = new Conexion();
+        $sqlQuery = "DELETE FROM `usuarios_movimiento` WHERE `usuario` = ".$usuario->getM_idusuario();
+        $con->getConnection()->query($sqlQuery);
+    }
 }

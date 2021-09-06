@@ -11,6 +11,8 @@
 body {
     background: url(../imagenes/hospital2.jpg);
     background-size: cover;
+    background-image: url(../imagenes/fondosgsrh10.jpg);
+    background-position: center center;
 }
 
 .main-section {
@@ -21,9 +23,24 @@ body {
 
 .modal-content {
     background-color: #3b4652;
+    background-color: #7db7f5;
     opacity: .85;
     padding: 0 20px;
     box-shadow: 0px 0px 3px #848484;
+    box-shadow: 0px 0px 3px #7099e6;
+}
+
+.main-sections {
+    margin: 0 auto;
+    margin-top: 1%;
+    padding: 0;
+}
+
+.modal-contents {
+    background-color: #7db7f5;
+    opacity: .85;
+    padding: 5 5px;
+    box-shadow: 0px 0px 3px #7099e6;
 }
 
 .user-img {
@@ -75,3 +92,12 @@ body {
     color: white;
 }
 
+.bg {
+    background-image: url(../imagenes/S.G.S.R.H\ \(4\).gif);
+    background-position: center center;
+}
+
+.logoContrasenia {
+    background-image: url(../imagenes/ingrese\ Email.gif);
+    background-position: center center;
+}

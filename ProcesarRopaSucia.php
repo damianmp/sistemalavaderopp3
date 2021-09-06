@@ -7,6 +7,7 @@
                 if($rol->getM_id() == 2){
                     //agregar movimiento a los pendientes para su devolucion
                     MovimientoDAO::addMovimento($usuDTOLogin, $_SESSION['total'], $_SESSION['id_mov']);
+                    SalasDAO::removeUsuarioPrendaSalas($usuDTOLogin);
                     unset($_SESSION['id_mov']);
                     echo "Espere por favor...";
                     echo "<meta http-equiv=\"refresh\" content=\"2;url=https://www.sistemalavaderopp3.ml/\"/>";
