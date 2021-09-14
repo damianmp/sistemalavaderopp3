@@ -5,7 +5,7 @@ include_once("html/Header.php");
     if(isset($_SESSION['usuario'])){
         $usuDTOLogin = $_SESSION['usuario'];
         foreach ($usuDTOLogin->getM_rol() as $rol){
-            if($rol->getM_id() == 2){
+            //if($rol->getM_id() == 2){
                 include_once("Barra.php");
                 ?>
 <div class="container-fluid modal-content">
@@ -57,7 +57,7 @@ include_once("html/Header.php");
 <?php
             }
         }
-    }
+    //}
 ?>
 <?php
     include_once("html/Footer.php");

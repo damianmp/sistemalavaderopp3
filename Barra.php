@@ -8,14 +8,26 @@ echo "Bienvenido! " . $usuDTOLogin->getM_nombre() . " Al S.G.S.R.H";
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav">
+      <ul class="navbar-nav">
+<?php
+    foreach ($usuDTOLogin->getM_rol() as $usurol){
+        if($usurol->getM_id() <= 2){
+    ?>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
           Administrar
         </a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="CrearPrenda.php">Ropa hopitalaria</a></li>
+          <?php
+          foreach ($usuDTOLogin->getM_rol() as $usurol){
+              if($usurol->getM_id() == 1){
+          ?>
           <li><a class="dropdown-item" href="AdministrarUsuarios.php">Administrar usuarios</a></li>
+          <?php
+              }
+          }
+           ?>
         </ul>
       </li>
       <li class="nav-item dropdown">
@@ -29,11 +41,11 @@ echo "Bienvenido! " . $usuDTOLogin->getM_nombre() . " Al S.G.S.R.H";
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-          Consultar stock
+          Consultar
         </a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Total de ropa hospitalaria</a></li>
-          <li><a class="dropdown-item" href="#">Por ropa hospitalaria</a></li>
+          <li><a class="dropdown-item" href="deposito.php">EL estado de la ropa hospitalaria</a></li>
+          <li><a class="dropdown-item" href="#">Stock Por tipo de ropa hospitalaria</a></li>
         </ul>
       </li>
       <li class="nav-item">
@@ -41,12 +53,19 @@ echo "Bienvenido! " . $usuDTOLogin->getM_nombre() . " Al S.G.S.R.H";
       </li>
     </ul>
   </div>
+<?php
+    }
+    else{
+        ?>
+    <li class="nav-item">
+        <a class="nav-link" href="cerrar.php">Cerrar sesion</a>
+      </li>
+    </ul>
+  </div>
+    <?php
+    }
+}
+?>
 </nav>
-<!--<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/jquery-1.11.3.js"></script>
-<script src="js/codigo.js"></script>
-<script src="/js/bootstrap.bundle.min.js"></script>
-<script src="js/bootstrap.bundle.js"></script>
-<script src="js/bootstrap.bundle.min.js.map"></script>-->
 
 

@@ -3,12 +3,18 @@ include_once("html/Header.php");
 
 session_start();
 if (!isset($_SESSION['usuario'])) {
+    if(!isset($_SESSION['password'])){
+        $_SESSION['password'] = "\0";
+    }
+    
+    if(!isset($_SESSION['time'])){
+        $_SESSION['time'] = 0;
+    }
 ?>
 <div class="container w-75 bg-Info mt-5 rounded shadow">
 <div class="row align-items-stretch"> 
 <div class="col logoContrasenia d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded">
     </div>
-
     <div class="col bg-white p-5 rounded-end">
     <div class="text-end">
     <img src="imagenes/sistema (3).png"  width="48" alt="">
@@ -28,7 +34,14 @@ if (!isset($_SESSION['usuario'])) {
     </div>
     <div id="contenido">
     <?php
+    
+    //echo ($_SESSION['time']+15*60)."     -*>      ".time()."<br>";
+    
     if (isset($_POST['email'])) {
+        if(!strcmp($_SESSION['password'], $_POST['email']) && ($_SESSION['time']+15*60) >= time()){
+            echo "Error, la contraseña ha sido enviada. Espere 15 segundos.";
+            return;
+        }
         $aux = UsuarioDAO::isEmailValid($_POST['email']);
         if ($aux != null) {
 
@@ -47,7 +60,10 @@ if (!isset($_SESSION['usuario'])) {
 
             $retval = mail($to, $subject, $message, $header);
             if ($retval == true) {
-                echo "Mensaje enviado correctamente!...";
+                echo "Mensaje enviado correctamente!";
+                
+                $_SESSION['password'] = $_POST['email'];
+                $_SESSION['time'] = time();
             }
             else {
                 //rolback
@@ -57,17 +73,12 @@ if (!isset($_SESSION['usuario'])) {
         }
     }
 }
-include_once("html/Footer.php");
 ?>
 </div>
-                </form>
-  </div>
+</form>
 </div>
 </div>
-
-
-
-
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/jquery-1.11.3.js"></script>
-<script src="js/codigo.js"></script>
+</div>
+<?php
+include_once("html/Footer.php");
+?>

@@ -4,7 +4,7 @@
     if(isset($_SESSION['usuario'])){
          $usuDTOLogin = $_SESSION['usuario'];
          foreach ($usuDTOLogin->getM_rol() as $rol){
-                if($rol->getM_id() == 2){
+                if($rol->getM_id() <= 2){
                     //agregar movimiento a los pendientes para su devolucion
                     MovimientoDAO::addMovimento($usuDTOLogin, $_SESSION['total'], $_SESSION['id_mov']);
                     SalasDAO::removeUsuarioPrendaSalas($usuDTOLogin);

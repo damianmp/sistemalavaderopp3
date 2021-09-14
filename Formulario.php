@@ -9,9 +9,14 @@
     $usuDTOLogin = $usuDao->InicioSesion(new UsuarioDTO($arrayPost[0],$arrayPost[1])); 
     if($usuDTOLogin != null){
         session_start();
-        $_SESSION['usuario'] = $usuDTOLogin;
         
-        echo "Espere por favor...";
+        if( $usuDTOLogin->getM_fecha_baja() == null){
+            $_SESSION['usuario'] = $usuDTOLogin;
+            echo "Espere por favor...";
+        }
+        else{
+            echo "Cuenta suspendida, contactese con el administrador.";
+        }
         echo "<meta http-equiv=\"refresh\" content=\"2;url=https://www.sistemalavaderopp3.ml/\"/>";
     }
     else{   

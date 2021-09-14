@@ -85,7 +85,7 @@
         if(isset($_SESSION['usuario'])){
             $usuDTOLogin = $_SESSION['usuario'];
             foreach ($usuDTOLogin->getM_rol() as $rol){
-                if($rol->getM_id() == 2){
+                //if($rol->getM_id() == 2){
                     if(isset($_POST['id'])){
                         $_SESSION['id_remito'] = $_POST['id'];
                     }
@@ -135,7 +135,7 @@
 <?php
                 }
             }
-        }
+        //}
 ?>
 </div>
 </html>

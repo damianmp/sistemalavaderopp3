@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario'])) {
 
       <div class="col bg-white p-5 rounded-end">
       <div class="text-end">
-      <img src="imagenes/sistema (3).png"  width="48" alt="" >
+      <img src="imagenes/sistemap.png"  width="48" alt="" >
       </div>
       <h2 class="fw-bold text-center py-5">Bienvenido</h2>
 
@@ -40,7 +40,7 @@ else {
   $usuDTOLogin = $_SESSION['usuario'];
   if ($usuDTOLogin->getM_rol()->count() > 0) {
     foreach ($usuDTOLogin->getM_rol() as $rol) {
-      if ($rol->getM_id() == 2) {
+      //if ($rol->getM_id() == 2) {
         include_once("Barra.php");
 ?>
 <br>
@@ -65,12 +65,6 @@ else {
     <span class="sr-only">Next</span>
   </a>
 </div>
-<div class="dropdown-menu">
-  <h6 class="dropdown-header">Dropdown header</h6>
-  <a class="dropdown-item" href="#">Action</a>
-  <a class="dropdown-item" href="#">Another action</a>
-</div>
-
                     <?php
         echo "<br>Todos los paquetes hechos:";
         $array = MovimientoDAO::getMovimientos("*");
@@ -78,16 +72,16 @@ else {
           echo "<br><a href='EditarPaquete.php?id=" . $movimientos->getId() . "'>" . $movimientos . "</a>";
         }
 ?>
-                        <div style="margin-top: 100px;text-align: center;font-style: italic;font-size: 10px;">
-                            Trabajo practico hecho por: Diego Pardo, Damian Elias Molina Ponce, Gerardo Aponte y Ramiro Claros
-                        </div>
-                    </div>
-                    <?php
+			<div style="margin-top: 100px;text-align: center;font-style: italic;font-size: 10px;">
+				Trabajo practico hecho por: Diego Pardo, Damian Elias Molina Ponce, Gerardo Aponte y Ramiro Claros
+			</div>
+		</div>
+<?php
       }
     }
   }
 ?>
 <?php
-}
+//}
 include_once("html/Footer.php");
 ?>

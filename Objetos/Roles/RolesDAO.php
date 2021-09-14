@@ -17,6 +17,16 @@
             return $array;
         }
         
+        public function setUserRol($usuario, $rol) {
+            $con = new Conexion();
+            $sqlQuery = "UPDATE `usuario_rol` SET `id_rol`= ? WHERE id_usuarios = ?";
+            $prepare = $con->getConnection()->prepare($sqlQuery);
+            $prepare->bind_param("ii", $idrol, $idusuarios);
+            $idrol = $rol;
+            $idusuarios = $usuario;
+            $prepare->execute();
+        }
+        
         public function getAllRoles(){
             $con = new Conexion();
             $sqlquery = "SELECT * FROM rol";

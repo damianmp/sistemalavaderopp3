@@ -21,7 +21,10 @@ class PrendaDAO{
         $resultado = $con->getConnection()->query($sqlQuery);
         if($resultado->num_rows == 1){
             //update
-            $sqlQuery = "UPDATE `deposito` SET `cantidad`=".$prenda->getM_cantidad()." WHERE `id_prenda` = ".$prenda->getM_codigo();
+            //que las prendas se acumulen
+            $row = $resultado->fetch_assoc();
+            
+            $sqlQuery = "UPDATE `deposito` SET `cantidad`=".($prenda->getM_cantidad()+$row['cantidad'])." WHERE `id_prenda` = ".$prenda->getM_codigo();
             $con->getConnection()->query($sqlQuery);
             return true;
         }
@@ -109,9 +112,9 @@ class PrendaDAO{
                 $aux = $auxp;
             }
         }
-        /*if($aux != null){
+        if($aux != null){
             //saco la formula actual
-            $total = (PrendaDAO::getCountPrenda($prenda->getM_codigo(), $movimiento)+$prenda->getM_cantidad())*2 + $cantidadSucia;
+            $total = (PrendaDAO::getCountPrenda($prenda->getM_codigo(), $movimiento)+$prenda->getM_cantidad()) + $cantidadSucia;
             
             //echo "<br>=============<br>cantidad todavia sin ingresar: ".$total."<br>cantidad a agregar: ". $prenda->getM_cantidad()."(".($prenda->getM_cantidad()*2).")<br>cantidad de prendas sucias(".$prenda->getM_descripcion()."): ".$cantidadSucia."<br>deposito(".$aux->getM_descripcion()."): ".$aux->getM_cantidad();
             if($total > $aux->getM_cantidad()){
@@ -121,11 +124,11 @@ class PrendaDAO{
         }
         else{
             return true;
-        }*/
-        if($aux == null){
-            return true;
         }
-        return false;
+        /*if($aux == null){
+            return true;
+        }*/
+        //return false;
     }
     
     public function getHTMLAllPrendas($b_valido) {
