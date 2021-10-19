@@ -111,7 +111,7 @@ if (isset($_SESSION['usuario'])) {
                             }
                         }
                     }
-                    echo "<td>".$total."(<a style='color: red;'>".$sumprenda."</a>)</td>";
+                    echo "<td>".$total."(<a style='color: red;'>".abs($sumprenda)."</a>)</td>";
                     echo "</tr>";
                 }
                 echo "</tr>";
