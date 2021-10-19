@@ -81,18 +81,40 @@ if (isset($_SESSION['usuario'])) {
 <thead>
         <tr>Deposito</tr>
     <tr>
-        <td>Prendas</td><td>CantidadTotal</td><td>Limpias</td><td>Sucias enviadas</td><td>Sucias sin enviar</td>
+        <td>Prendas</td><td>Total</td><td>Disponible</td><td>En lavadero</td><td>Deposito ropa sucia</td><td>Area de servicio</td>
     </tr>
     </thead>
     <tbody>
 <?php
             $auxMapa = PrendaDAO::getPrendaDeposito();
             foreach ($auxMapa->keys() as $auxp) {
-                echo "<tr><td><img src='" . $auxp->getM_icono() . "' style='width: 25px'>" . $auxp->getM_descripcion() . "</td><td>" . $auxp->getM_cantidad() . "</td>"
+                echo "<tr><td><img src='" . $auxp->getM_icono() . "' style='width: 25px'>" . $auxp->getM_descripcion() . "</td>"
+                    . "<td>" . $auxp->getM_cantidad() . "</td>"
                     . "<td>" . ($auxp->getM_cantidad() - DepositoDAO::getPrendaSucias($auxp)) . "</td>"
                     . "<td>" . DepositoDAO::getPrendaSucias($auxp) . "</td>"
-                    . "<td>" . (DepositoDAO::getPrendasSinEnviar($auxp) == 0 ? 0 : DepositoDAO::getPrendasSinEnviar($auxp)) . "</td>"
-                    . "</tr>";
+                    . "<td>" . (DepositoDAO::getPrendasSinEnviar($auxp) == 0 ? 0 : DepositoDAO::getPrendasSinEnviar($auxp)) . "</td>";
+                
+                $salaslimpias = DepositoDAO::getPrendaLimpias($auxp);
+                foreach ($salaslimpias as $auxSala){
+                    echo "<tr><td>".$auxSala->getM_descripcion()."</td><td>-</td><td>-</td><td>-</td><td>-</td>";
+                    $total = 0;
+                    $sumprenda = 0;
+                    
+                    foreach($auxSala->getM_prendas() as $auxprendas){
+
+                        if($auxprendas->getM_codigo() == $auxp->getM_codigo()){
+                            if($auxprendas->getM_cantidad() >= 0){
+                                $total = $auxprendas->getM_cantidad();
+                            }
+                            else{   
+                                $sumprenda += $auxprendas->getM_cantidad();
+                            }
+                        }
+                    }
+                    echo "<td>".$total."(<a style='color: red;'>".$sumprenda."</a>)</td>";
+                    echo "</tr>";
+                }
+                echo "</tr>";
             }
 ?>
     </tbody>

@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/AdministrarUsuarios.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/Objetos/Usuarios/UsuariosDTO.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/Objetos/Usuarios/UsuariosDAO.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/AdministrarDeposito.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/Objetos/Remito/RemitoDAO.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/ProcesarUsuario.php</file>
+            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/CargarRopaLimpias.php</file>
+            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/Objetos/Deposito/DepositoDAO.php</file>
             <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/Objetos/Prendas/PrendaDAO.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/remito.php</file>
-            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/index.php</file>
+            <file>file:/C:/Users/Tom/Documents/NetBeansProjects/pp3/deposito.php</file>
         </group>
     </open-files>
 </project-private>

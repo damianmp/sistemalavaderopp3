@@ -24,6 +24,7 @@ echo "Bienvenido! " . $usuDTOLogin->getM_nombre() . " Al S.G.S.R.H";
               if($usurol->getM_id() == 1){
           ?>
           <li><a class="dropdown-item" href="AdministrarUsuarios.php">Administrar usuarios</a></li>
+          <li><a class="dropdown-item" href="Log.php">Ver Movimientos</a></li>
           <?php
               }
           }
@@ -37,6 +38,7 @@ echo "Bienvenido! " . $usuDTOLogin->getM_nombre() . " Al S.G.S.R.H";
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="CargarRopaSucia.php">Egresos de ropa hospitalaria</a></li>
           <li><a class="dropdown-item" href="AdministrarDeposito.php">Ingresos de ropa hospitalaria</a></li>
+          <li><a class="dropdown-item" href="CargarRopaLimpias.php">Ingresos de ropa a salas</a></li>
         </ul>
       </li>
       <li class="nav-item dropdown">

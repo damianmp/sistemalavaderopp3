@@ -9,8 +9,6 @@
 }
 
 body {
-    background: url(../imagenes/hospital2.jpg);
-    background-size: cover;
     background-image: url(../imagenes/fondosgsrh10.jpg);
     background-position: center center;
 }
@@ -22,12 +20,10 @@ body {
 }
 
 .modal-content {
-    background-color: #3b4652;
-    background-color: #7db7f5;
+    background-color: #c1dcf8;
     opacity: .85;
     padding: 0 20px;
-    box-shadow: 0px 0px 3px #848484;
-    box-shadow: 0px 0px 3px #7099e6;
+    box-shadow: 5px 5px 5px #a7bfeb;
 }
 
 .main-sections {
@@ -37,10 +33,10 @@ body {
 }
 
 .modal-contents {
-    background-color: #7db7f5;
+    background-color: #a5c8ee;
     opacity: .85;
-    padding: 5 5px;
-    box-shadow: 0px 0px 3px #7099e6;
+    padding: 1 1px;
+    box-shadow: 1px 1px 1px #797c81;
 }
 
 .user-img {
@@ -63,27 +59,6 @@ body {
     border-radius: 5px;
 }
 
-.form-group::before {
-    font-family: "Font Awesome\ 5 free";
-    position: absolute;
-    left: 28px;
-    font-size: 20px;
-    padding-top: 0px;
-}
-
-.form-group#user-group::before {
-    content: "\f007";
-}
-
-.form-group#contrasena-group::before {
-    content: "\f023";
-}
-
-/*button {
-    width: 60%;
-    margin: 5px 0 25px;
-}*/
-
 .forgot {
     padding: 5px 0;
 }
@@ -93,11 +68,11 @@ body {
 }
 
 .bg {
-    background-image: url(../imagenes/S.G.S.R.H\ \(4\).gif);
+    background-image: url(../imagenes/sistemag.gif);
     background-position: center center;
 }
 
 .logoContrasenia {
-    background-image: url(../imagenes/ingrese\ Email.gif);
+    background-image: url(../imagenes/ingreseeamil.gif);
     background-position: center center;
 }

@@ -33,7 +33,7 @@ class DepositoDAO{
     }
     
     public function getPrendaSucias(Prenda $prenda) {
-        $sqlQuery = "select sum(pa.cantidad) as 'cantidad' from prenda_salas as pa join movimiento as m on pa.id_movimiento like m.id where pa.id_prenda = ".$prenda->getM_codigo();
+        $sqlQuery = "select sum(pa.cantidad) as 'cantidad' from prenda_salas as pa join movimiento as m on pa.id_movimiento like m.id where pa.id_prenda = ".$prenda->getM_codigo()." and pa.id_estado = 2";
         $con = new Conexion();
         $statement = $con->getConnection()->query($sqlQuery);
         $row = $statement->fetch_assoc();
@@ -51,15 +51,48 @@ class DepositoDAO{
          */
         $con = new Conexion();
         
-        $sqlQuery = "SELECT sum(ps.cantidad) as total FROM `usuarios_movimiento` as um join prenda_salas as ps on um.prenda_salas like ps.id_movimiento WHERE ps.id_prenda = ".$prenda->getM_codigo();
+        $sqlQuery = "SELECT sum(ps.cantidad) as total FROM `usuarios_movimiento` as um join prenda_salas as ps on um.prenda_salas like ps.id_movimiento WHERE ps.id_prenda = ".$prenda->getM_codigo()." and ps.id_estado = 2";
         
         $resultados = $con->getConnection()->query($sqlQuery);
         if($resultados->num_rows > 0){
             $row = $resultados->fetch_assoc();
             return $row['total'];
         }
-        
-        
+    }
+    
+    public function getPrendaLimpias(Prenda $prenda) {
+        //saco las tandas limpias de las salas
+        /*
+         *      SALA ->array( PRENDA limpia )
+         */
+        $array = new ArrayObject();
+        $allsalas = SalasDAO::getAllSalas();
+        foreach($allsalas as $sala){
+            $aux = SalasDAO::getSalaLimpia($sala->getM_id());
+            if(self::getCountPrendas($aux)> 0 && self::isPrendaInSala($aux, $prenda)){
+                $array->append($aux);
+            }
+        }
+        return $array;
+    }
+    
+    private function getCountPrendas(SalasDTO $sala) {
+        $x = 0;
+        $prendas = $sala->getM_prendas();
+        foreach($prendas as $aux){
+            $x++;
+        }
+        return $x;
+    }
+    
+    private function isPrendaInSala(SalasDTO $sala, Prenda $prenda) {
+        $prendas = $sala->getM_prendas();
+        foreach($prendas as $aux){
+            if($aux->getM_codigo() == $prenda->getM_codigo()){
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>

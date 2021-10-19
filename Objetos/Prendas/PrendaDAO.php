@@ -3,7 +3,7 @@
 class PrendaDAO{
     public function isPrendaInDepositoFromMovimiento($prenda, $id){
         $con = new Conexion();
-        $sqlQuery = "SELECT count(*) as 'cantidad_de_registro' FROM `prenda_salas` WHERE `id_prenda` = ".$prenda->getM_codigo()." and `id_movimiento` = '".$id."' limit 1 ";
+        $sqlQuery = "SELECT count(*) as 'cantidad_de_registro' FROM `prenda_salas` WHERE `id_prenda` = ".$prenda->getM_codigo()." and `id_movimiento` = '".$id."' and id_estado = 2 limit 1 ";
         $resultado = $con->getConnection()->query($sqlQuery);
         $row = $resultado->fetch_assoc();
         if($row['cantidad_de_registro'] > 0){
@@ -72,7 +72,7 @@ class PrendaDAO{
     
     public function getCountPrenda($id, $mov) {
         $con = new Conexion();
-        $sqlQury = "SELECT SUM(cantidad) as sumatoria FROM `prenda_salas` WHERE `id_prenda` = ".$id." and id_movimiento like '".$mov."'";
+        $sqlQury = "SELECT SUM(cantidad) as sumatoria FROM `prenda_salas` WHERE `id_prenda` = ".$id." and id_movimiento like '".$mov."' and id_estado = 2";
         
         $resultado = $con->getConnection()->query($sqlQury);
         if($resultado != null && $resultado->num_rows == 1){
@@ -83,7 +83,7 @@ class PrendaDAO{
     
     public function getCountPrendaSucia($prenda){
         $con = new Conexion();
-        $sqlQuery = "SELECT sum(cantidad) as total from prenda_salas as ps join movimiento as m on m.id like ps.id_movimiento where id_prenda = ".$prenda->getM_codigo();
+        $sqlQuery = "SELECT sum(cantidad) as total from prenda_salas as ps join movimiento as m on m.id like ps.id_movimiento where id_estado = 2 and id_prenda = ".$prenda->getM_codigo();
         
         $resultado = $con->getConnection()->query($sqlQuery);
         if($resultado != null && $resultado->num_rows == 1){
@@ -99,6 +99,8 @@ class PrendaDAO{
          *  si agrego 2 prendas, entonces tengo que tener 2 prendas mas por lo menos para poder
          *  tener un respaldo. si agrego 2 prendas sucias, entonces tengo que tener por lo menos
          *  2 prendas mas, dando un total de 4 prendas.-
+         * 
+         * 21/09/2021 14:50 - Se modifico la formula, ahora se cuenta si hay respaldo en el deposito
          */
         $cantidadSucia = PrendaDAO::getCountPrendaSucia($prenda);
         if($cantidadSucia == null){
@@ -223,5 +225,184 @@ class PrendaDAO{
             return $prenda[0];
         }
         return $prenda;
+    }
+    
+    //get la tanda de ropa limpia
+    public function getPrendaSalaMovLimpia($prenda, $sala) {
+        $con = new Conexion();
+        $sqlQuery = "SELECT * FROM `prenda_salas` where id_salas = ".$sala." and id_prenda = ".$prenda. " and id_estado = 1";
+        $statement = $con->getConnection()->query($sqlQuery);
+        if($statement->num_rows > 0){
+            $row = $statement->fetch_assoc();
+            return $row['id_movimiento'];
+        }
+    }
+    
+    public function removePrendaMovSalaLimpia($prenda, $sala, $cantidad) {
+        /*
+         * La idea:
+         * agarrar una cantidad e ir sacando la resta de las prendas que podria sacar
+         */
+        $con = new Conexion();
+        $sqlQuery = "Select * from prenda_salas where id_prenda =".$prenda." and id_salas=".$sala." and cantidad < 0 and id_estado = 1";
+        $statement = $con->getConnection()->query($sqlQuery);
+        
+        //echo $sqlQuery."<br>";
+        
+        if($statement->num_rows > 0){
+            $row = $statement->fetch_assoc();
+            
+            $sqlQuery = ($cantidad+$row['cantidad'] < 0 )? 
+                    "UPDATE `prenda_salas` SET `cantidad`= ? WHERE `id_salas` = ? and `id_prenda`=? and `id_estado`=1 and `id_movimiento`= ? and cantidad <0 "
+                    :
+                    "DELETE FROM `prenda_salas` WHERE `id_salas` = ? and `id_prenda`=? and `id_estado`=1 and `id_movimiento`= ? and cantidad <0";
+            
+            //echo ($cantidad+$row['cantidad'])." --<br> ".$sqlQuery;
+            
+            $prepare = $con->getConnection()->prepare($sqlQuery);
+
+            if($cantidad+$row['cantidad'] < 0){
+                $prepare->bind_param("iiis", $auxcantidad, $id_salas, $id_prenda, $movimiento);
+                $auxcantidad = $cantidad+$row['cantidad'];
+                $id_salas = $sala;
+                $id_prenda = $prenda;
+                $movimiento = $row['id_movimiento'];
+            }
+            else{   
+                $prepare->bind_param("iis", $id_salas, $id_prenda, $movimiento);
+                $id_salas = $sala;
+                $id_prenda = $prenda;
+                $movimiento = $row['id_movimiento'];
+            }
+
+            $prepare->execute();
+        }
+    }
+
+    public function addPrendaMovSalaLimpia($prenda, $sala) {
+        $con = new Conexion();
+        $movimiento = self::getPrendaSalaMovLimpia($prenda->getM_codigo(),$sala->getM_id());
+        //$sqlQurty = "INSERT INTO `prenda_salas`(`id_salas`, `id_prenda`, `id_estado`, `id_movimiento`, `cantidad`) VALUES (?,?,1,?,?)";
+        $sqlQuery = "SELECT * FROM prenda_salas where id_salas = ".$sala->getM_id()." and id_prenda = ".$prenda->getM_codigo()." and id_estado = 1 and id_movimiento like '".$movimiento."'";
+        $statement = $con->getConnection()->query($sqlQuery);
+        
+        //echo $sqlQuery;
+        
+        if($statement->num_rows > 0){
+            
+            $row = $statement->fetch_assoc();
+            
+            //var_dump($row);
+            
+            $sqlQuery = "SELECT * FROM prenda_salas where id_salas = ".$sala->getM_id()." and id_prenda = ".$prenda->getM_codigo()." and id_estado = 1 and id_movimiento like '".$movimiento."' and cantidad <= 0";
+            $statement = $con->getConnection()->query($sqlQuery);
+            
+            //echo $sqlQuery;
+            
+            if($statement->num_rows > 0){
+                $row = $statement->fetch_assoc();
+                
+                $sqlQurty = "UPDATE `prenda_salas` SET `cantidad`= ? WHERE `id_salas` = ? and `id_prenda`=? and `id_estado`=1 and `id_movimiento`=? and cantidad <0";
+                $preparar = $con->getConnection()->prepare($sqlQurty);
+                $preparar->bind_param("iiis",$cantidad , $id_salas, $id_prenda, $id_movimiento);
+                $id_salas = $sala->getM_id();
+                $id_prenda = $prenda->getM_codigo();
+                $cantidad = $row['cantidad'] + $prenda->getM_cantidad();
+                $id_movimiento = $movimiento;
+                
+                $preparar->execute();
+            }
+            else{
+                //echo "no";
+                $sqlQurty = "INSERT INTO `prenda_salas`(`id_salas`, `id_prenda`, `id_estado`, `id_movimiento`, `cantidad`) VALUE (?,?,1,?,?)";
+                $preparar = $con->getConnection()->prepare($sqlQurty);
+                $preparar->bind_param("iisi", $id_salas, $id_prenda, $id_movimiento, $cantidad);
+                $id_salas = $sala->getM_id();
+                $id_prenda = $prenda->getM_codigo();
+                $cantidad = $prenda->getM_cantidad();
+                $id_movimiento = $movimiento;
+                
+                $preparar->execute();
+            }
+        }
+    }
+
+    public function addPrendaSalaLimpia(Prenda $prenda, $sala){
+        //averiguo si hay un movimiento existente
+        /*
+         * El id_movimiento para prendas limpias (1) en este caso seria para un uso distinto: se usaria para distinguir tandas de prendas.
+         */
+        $con = new Conexion();
+        $sqlQurty = "SELECT * from prenda_salas where id_salas = ".$sala." and id_prenda = ".$prenda->getM_codigo()." and id_estado = 1";
+        
+        //echo $sqlQurty;
+        
+        $statement = $con->getConnection()->query($sqlQurty);
+        if($statement->num_rows > 0){
+            
+            //echo "if($statement->num_rows > 0){";
+            
+            $row = $statement->fetch_assoc();
+            
+            //var_dump($row);
+            
+            $sqlQurty = "UPDATE `prenda_salas` SET cantidad = ? where id_salas = ? and id_prenda = ? and id_estado = 1";
+            $prepare = $con->getConnection()->prepare($sqlQurty);
+            $prepare->bind_param("iii",$cantidad , $id_salas, $id_prenda);
+            $id_salas = $sala;
+            $id_prenda = $prenda->getM_codigo();
+            $cantidad = $prenda->getM_cantidad();
+            
+            $prepare->execute();
+            
+            //echo $row;
+            
+            return $row['id_movimiento'];
+            
+        }
+        else{
+            $sqlQurty = "INSERT INTO `prenda_salas`(`id_salas`, `id_prenda`, `id_estado`, `id_movimiento`, `cantidad`) VALUES (?,?,1,?,?)";
+            $prepare = $con->getConnection()->prepare($sqlQurty);
+            $prepare->bind_param("iisi", $id_salas, $id_prenda, $id_movimiento, $cantidad);
+            $id_salas = $sala;
+            $id_prenda = $prenda->getM_codigo();
+            $cantidad = $prenda->getM_cantidad();
+            $id_movimiento = hash("md5", (rand(-9999999999999999, 9999999999999999)));
+
+            $prepare->execute();
+
+            return $id_movimiento;
+        }
+    }
+    
+    public function getPrendasSala($sala, $prenda, $estado, $mov) {
+        $con = new Conexion();
+        $sqlQuery = ($estado == 1)?
+            "SELECT sum(cantidad) as cantidad FROM `prenda_salas` where id_salas = ".$sala." and id_prenda = ".$prenda." and id_estado = ".$estado
+                :
+            "SELECT * FROM `prenda_salas` where id_salas = ".$sala." and id_prenda = ".$prenda." and id_estado = ".$estado." and id_movimiento like '".$mov."'";
+        $statement = $con->getConnection()->query($sqlQuery);
+        
+        //echo "<br>".$sqlQuery."<br>";
+        
+        if($statement->num_rows > 0){
+            $row = $statement->fetch_assoc();
+            
+            return $row['cantidad'];
+        }
+    }
+    
+    public function removePrendasDebe($sala, $prenda, $cantidad) {
+        $con = new Conexion();
+        $sqlQuery = "DELETE FROM `prenda_salas` WHERE id_salas = ? and id_prenda = ? and id_estado = 1 and cantidad = ?";
+        $prepare = $con->getConnection()->prepare($sqlQuery);
+        $prepare->bind_param("iii",$id_sala, $id_prenda, $can);
+        $id_sala = $sala;
+        $id_prenda = $prenda;
+        $can = $cantidad;
+        
+        $prepare->execute();
+        
+        
     }
 }

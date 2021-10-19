@@ -8,6 +8,10 @@
                     //agregar movimiento a los pendientes para su devolucion
                     MovimientoDAO::addMovimento($usuDTOLogin, $_SESSION['total'], $_SESSION['id_mov']);
                     SalasDAO::removeUsuarioPrendaSalas($usuDTOLogin);
+                    
+                    $formato = "Se agrego como entregado al lavadero";
+                    LogDAO::addLog(new LogDTO($usuDTOLogin->getM_idusuario(), $_SESSION['id_mov'], $formato));
+                    
                     unset($_SESSION['id_mov']);
                     echo "Espere por favor...";
                     echo "<meta http-equiv=\"refresh\" content=\"2;url=https://www.sistemalavaderopp3.ml/\"/>";

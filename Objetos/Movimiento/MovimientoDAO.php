@@ -6,7 +6,7 @@ class MovimientoDAO{
         $sqlQuery = "DELETE FROM `movimiento` WHERE id like '".$id."'";
         $statement = $con->getConnection()->query($sqlQuery);
         
-        $sqlQuery = "DELETE FROM `prenda_salas` WHERE `id_movimiento` like '".$id."'";
+        $sqlQuery = "DELETE FROM `prenda_salas` WHERE `id_movimiento` like '".$id."' and id_estado = 2";
         $statement = $con->getConnection()->query($sqlQuery);
     }
     
@@ -50,7 +50,7 @@ class MovimientoDAO{
     
     public function getSalaPrendaFromMovimiento($mov) {
         $con = new Conexion();
-        $sqlQuery = "SELECT s.id_sala, s.descripcion as sala, p.codigo, p.descripcion, ps.cantidad FROM prenda_salas as ps join prenda as p on p.codigo = ps.id_prenda join salas as s on s.id_sala = ps.id_salas where id_movimiento like '".$mov."'";
+        $sqlQuery = "SELECT s.id_sala, s.descripcion as sala, p.codigo, p.descripcion, ps.cantidad FROM prenda_salas as ps join prenda as p on p.codigo = ps.id_prenda join salas as s on s.id_sala = ps.id_salas where id_movimiento like '".$mov."' and ps.id_estado = 2";
         
         $array = new ArrayObject();
         

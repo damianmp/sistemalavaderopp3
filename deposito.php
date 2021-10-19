@@ -12,19 +12,11 @@ if (isset($_SESSION['usuario'])) {
     <div class="col-sm-10 main-sections">
         <div class="modal-contents">
             <h4>Movimiento ropa hospitalaria:</h4>
-<?php
-            if (isset($_GET['tipoprenda']) && isset($_GET['cantidad'])) {
-                $prenda = PrendaDAO::getPrenda($_GET['tipoprenda']);
-                $prenda->setM_cantidad($_GET['cantidad']);
-
-                PrendaDAO::addPrendaDeposito($prenda);
-            }
-?>
 <table class="table table-sm table-primary ">
 <thead>
         <tr>Deposito</tr>
     <tr>
-    <td>Prendas</td><td>Cantidad Ingresada</td><td>Saldo</td><td>Lavadero(Tex-care)</td><td>AreaSucia</td>
+    <td>Prendas</td><td>Cantidad Total</td><td>Limpias</td><td>Sucias enviadas</td><td>Sucias sin enviar</td>
     </tr>
     </thead>
     <tbody>

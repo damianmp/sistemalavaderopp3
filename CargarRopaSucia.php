@@ -39,8 +39,6 @@ if (isset($_SESSION['usuario'])) {
                      </td>
                     
         </tr>
-            
-          
         <tr>
             <td>
                 <div class="col-sm-12">
@@ -107,8 +105,14 @@ if (isset($_SESSION['usuario'])) {
 
                 $sala = $sala[0];
                 $prenda = $prenda[1];
-
+                
                 SalasDAO::removeSalaPrenda($sala, $prenda, $_SESSION['id_mov']);
+                PrendaDAO::removePrendaMovSalaLimpia($prenda, $sala, $_GET['cantidad']);
+                
+                $sala = SalasDAO::getSala($sala, $_SESSION['id_mov']);
+                $prenda = PrendaDAO::getPrendaById($prenda);
+                $formato = "Se borro ".$prenda->getM_descripcion()." de la sala ".$sala->getM_descripcion()."[".$sala->getM_id()."] de la ropa sucia";
+                LogDAO::addLog(new LogDTO($usuDTOLogin->getM_idusuario(), $_SESSION['id_mov'], $formato));
             }
             if (isset($_GET['tipoprenda']) && isset($_GET['cantidad']) && isset($_GET['sala'])) {
                 $prenda = PrendaDAO::getPrendaFromString($_GET['tipoprenda']);
@@ -117,28 +121,39 @@ if (isset($_SESSION['usuario'])) {
                 $sala = SalasDAO::getSala($_GET['sala'], $_SESSION['id_mov']);
 
                 //verifico que lo que lo que se quiera agregar no sobrepase lo que hay en el deposito
+                //tampoco lo que haya en en area de servicio
+
+                if((PrendaDAO::getPrendasSala($sala->getM_id(),$prenda->getM_codigo(), 1, $_SESSION['id_mov']) 
+                        + 
+                        PrendaDAO::getPrendasSala($sala->getM_id(),$prenda->getM_codigo(), 2, $_SESSION['id_mov'])) < $prenda->getM_cantidad())
+                {
+                    echo "<a style='color: yellow;'><b>Advertencia! cantidad de prendas a agregar mayor al del area del servicio</b></a><br>";
+                }
+                
                 if (PrendaDAO::isOutboundPrendaDeposito($prenda, $_SESSION['id_mov'])) {
                     echo "<a style='color: red;'>Error! cantidad de prendas a agregar invalida</a>";
                 }
                 else {
                     SalasDAO::addSala($sala, $prenda, $_SESSION['id_mov']);
+                    
+                    $formato = "Se agrego ".$prenda->getM_descripcion()."(".$prenda->getM_cantidad().") de la sala ".$sala->getM_descripcion()."[".$sala->getM_id()."] como a enviar al lavadero";
+                    LogDAO::addLog(new LogDTO($usuDTOLogin->getM_idusuario(), $_SESSION['id_mov'], $formato));
+                    
+                    $prenda->setM_cantidad($prenda->getM_cantidad()-$prenda->getM_cantidad()*2);
+                    PrendaDAO::addPrendaMovSalaLimpia($prenda, $sala);
                 }
             }
 
             foreach ($salaI as $aux) {
 ?>
         <form id="cargarRopaSucia" action="CargarRopaSucia.php" method="get">
-            
-            
-            
-            
-            
             <?php
                 echo "<table class='table table-sm table-striped table-bordered table-hover table-primary' border='1px'><thead class='thead-light'><th colspan='4'>" . $aux->getM_descripcion() . "</th></tr><tr><td>Imagen</td><td>Prenda</td><td>Cantidad</td><td></td></tr>";
                 $aux = SalasDAO::getSala($aux->getM_id(), $_SESSION['id_mov']);
                 if ($aux->getM_prendas() != null) {
                     foreach ($aux->getM_prendas() as $prenda) {
                         echo "<tr><td><img src='" . $prenda->getM_icono() . "' style='width: 80px'></td><td ><h3>" . $prenda->getM_descripcion() . "</h3></td><td><h3>" . $prenda->getM_cantidad() . "</h3></td><td><button id='borrar' class='btn btn-warning btn-sm btn-block' name='prenda' type='submit' value='" . $aux->getM_id() . "p" . $prenda->getM_codigo() . "'>Borrar</button></tr>";
+                        echo "<input type='number' name='cantidad' value='".$prenda->getM_cantidad()."' hidden>";
                     }
                 }
                 echo "</table>";
